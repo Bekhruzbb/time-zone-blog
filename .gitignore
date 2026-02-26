@@ -29,7 +29,7 @@ db.sqlite3
 /static_collected/
 media/
 static/
-
+.env/
 # IDE-specific files (optional, can be in a global gitignore)
 .idea/  # For PyCharm
 
