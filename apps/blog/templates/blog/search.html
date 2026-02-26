@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search
+{% endblock %}
+
+{% block content %}
+<h2 class="text-center my-4">
+    <b>{{query}}</b>
+</h2>
+<div class="col-lg-8 mb-5 mb-lg-0">
+    <div class="blog_left_sidebar">
+        {% for article in articles %}
+        <article class="blog_item">
+            <div class="blog_item_img">
+                <img class="card-img rounded-0" src="{{article.photo.url}}" alt="">
+                <a href="{% url 'blog:detail' article.slug %}" class="blog_item_date">
+                    <h3>{{article.created_at|date:'d'}}</h3>
+                    <p>{{article.created_at|date:'M'}}</p>
+                </a>
+            </div>
+
+            <div class="blog_details">
+                <a class="d-inline-block" href="{% url 'blog:detail' article.slug %}">
+                    <h2>{{article.title}}</h2>
+                </a>
+                <p>{{article.short_description}}</p>
+                <ul class="blog-info-link">
+                    {% for tag in article.tag.all %}
+                    <li><a href="#"><i class="fa fa-user"></i> {{tag.title}}</a></li>
+                    {% endfor %}
+                    <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li>
+                </ul>
+            </div>
+        </article>
+        {% endfor %}
+        <nav class="blog-pagination justify-content-center d-flex">
+            {% if articles.has_other_pages %}
+            <ul class="pagination">
+                {% if articles.has_previous %}
+                <li class="page-item">
+                    <a href="?page={{articles.previous_page_number}}" class="page-link" aria-label="Previous">
+                        <i class="ti-angle-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+                {% for page in articles.paginator.page_range %}
+                {% if page == articles.number %}
+                <li class="page-item active">
+                    <a href="?page={{page}}" class="page-link">{{page}}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a href="?page={{page}}" class="page-link">{{page}}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if articles.has_next %}
+                <li class="page-item">
+                    <a href="?page={{articles.next_page_number}}" class="page-link" aria-label="Next">
+                        <i class="ti-angle-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </nav>
+    </div>
+</div>
+{% endblock %}

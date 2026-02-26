@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+/.init
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.whl
+venv/
+env/
+pip-wheel-cache/
+.venv/
+db.sqlite
+# Django
+*.log
+local_settings.py
+db.sqlite3
+/static_collected/
+media/
+static/
+
+# IDE-specific files (optional, can be in a global gitignore)
+.idea/  # For PyCharm
+
+
+# OS-specific files
+Thumbs.db # Windows

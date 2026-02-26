@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Blog page
+{% endblock %}
+
+{% block content %}
+<div class="slider-area ">
+    <div class="single-slider slider-height2 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap text-center">
+                        <h2>Blog</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--? Hero Area End-->
+<!--================Blog Area =================-->
+<section class="blog_area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mb-5 mb-lg-0">
+                <div class="blog_left_sidebar">
+                    {% for article in articles %}
+                    <article class="blog_item">
+                        <div class="blog_item_img">
+                            <img class="card-img rounded-0" src="{{article.photo.url}}" alt="">
+                            <a href="{% url 'blog:detail' article.slug %}" class="blog_item_date">
+                                <h3>{{article.created_at|date:'d'}}</h3>
+                                <p>{{article.created_at|date:'M'}}</p>
+                            </a>
+                        </div>
+
+                        <div class="blog_details">
+                            <a class="d-inline-block" href="{% url 'blog:detail' article.slug %}">
+                                <h2>{{article.title}}</h2>
+                            </a>
+                            <p>{{article.short_description}}</p>
+                            <ul class="blog-info-link">
+                                {% for tag in article.tag.all %}
+                                <li><a href="{% url 'blog:tag' tag.slug %}"><i class="fa fa-user"></i> {{tag.title}}</a></li>
+                                {% endfor %}
+                                <li><a href="#"><i class="fa fa-comments"></i> {{article.comments.count}} Comments</a></li>
+                            </ul>
+                        </div>
+                    </article>
+                    {% endfor %}
+                    <nav class="blog-pagination justify-content-center d-flex">
+                        {% if articles.has_other_pages %}
+                        <ul class="pagination">
+                            {% if articles.has_previous %}
+                            <li class="page-item">
+                                <a href="?page={{articles.previous_page_number}}" class="page-link" aria-label="Previous">
+                                    <i class="ti-angle-left"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% for page in articles.paginator.page_range %}
+                            {% if page == articles.number %}
+                            <li class="page-item active">
+                                <a href="?page={{page}}" class="page-link">{{page}}</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item">
+                                <a href="?page={{page}}" class="page-link">{{page}}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if articles.has_next %}
+                            <li class="page-item">
+                                <a href="?page={{articles.next_page_number}}" class="page-link" aria-label="Next">
+                                    <i class="ti-angle-right"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="blog_right_sidebar">
+                    <aside class="single_sidebar_widget search_widget">
+                        <form action="{% url 'blog:search' %}" method="GET">
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <input type="text" name="q" class="form-control" placeholder='Search Keyword'
+                                           onfocus="this.placeholder = ''"
+                                           onblur="this.placeholder = 'Search Keyword'">
+                                </div>
+                            </div>
+                            <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                                    type="submit">Search
+                            </button>
+                        </form>
+                    </aside>
+
+                    <aside class="single_sidebar_widget post_category_widget">
+                        <h4 class="widget_title">Category</h4>
+                        <ul class="list cat-list">
+                            {% for category in categories %}
+                            <li>
+                                <a href="{% url 'blog:category' category.slug %}" class="d-flex">
+                                    <p>{{ category }}</p>
+                                    <p>{{ category.count }}</p>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+
+                    <aside class="single_sidebar_widget popular_post_widget">
+                        <h3 class="widget_title">Recent Post</h3>
+                        {% for article in articles %}
+                        <div class="media post_item">
+                            <img src="{{ article.preview.url }}" alt="post">
+                            <div class="media-body">
+                                <a href="{% url 'blog:detail' article.slug %}">
+                                    <h3>{{article.title}}</h3>
+                                </a>
+                                <p>{{article.created_at|date}}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </aside>
+                    <aside class="single_sidebar_widget tag_cloud_widget">
+                        <h4 class="widget_title">Tag Clouds</h4>
+                        <ul class="list">
+                            {% for tag in tags %}
+                            <li>
+                                <a href="{% url 'blog:tag' tag.slug %}">{{tag}}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+
+
+                    <aside class="single_sidebar_widget instagram_feeds">
+                        <h4 class="widget_title">Instagram Feeds</h4>
+                        <ul class="instagram_row flex-wrap">
+                            {% for photo in photos %}
+                            <li>
+                                <a href="#">
+                                    <img class="img-fluid" src="{{photo.image.url}}" alt="">
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+
+
+                    <aside class="single_sidebar_widget newsletter_widget">
+                        <h4 class="widget_title">Newsletter</h4>
+
+                        <form action="#">
+                            <div class="form-group">
+                                <input type="email" class="form-control" onfocus="this.placeholder = ''"
+                                       onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
+                            </div>
+                            <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                                    type="submit">Subscribe
+                            </button>
+                        </form>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Checkout page
+{% endblock %}
+
+{% block content %}
+
+<div class="slider-area ">
+    <div class="single-slider slider-height2 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap text-center">
+                        <h2>Checkout</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--================Checkout Area =================-->
+<section class="checkout_area section_padding">
+
+    {% if request.user.is_authenticated %}
+    <div class="container">
+        <div class="cupon_area">
+            <div class="check_title">
+                <h2>
+                    Have a coupon?
+                    <a href="#">Click here to enter your code</a>
+                </h2>
+            </div>
+            <input type="text" placeholder="Enter coupon code"/>
+            <a class="tp_btn" href="#">Apply Coupon</a>
+        </div>
+        <div class="billing_details">
+            <div class="row">
+                <form class="row contact_form" action="{% url 'cart:check-add' %}" method="post">
+                    {% csrf_token %}
+                    <div class="col-lg-8">
+                        <h3>Billing Details</h3>
+                        <div class="mb-3">
+                            {{ form }}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="order_box">
+                            <h2>Your Order</h2>
+                            <ul class="list">
+                                <li>
+                                    <a href="{% url 'shop:shop' %}">Product
+                                        <span>Total</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    {% for cart_product in cart.cart_products.all %}
+                                    <a href="{% url 'shop:detail' cart_product.product.slug %}">{{cart_product.product.title}}
+                                        <span class="middle">x {{cart_product.quantity}}</span>
+                                        <span class="last">${{cart_product.product.price}}</span>
+                                    </a>
+                                    {% endfor %}
+                            </ul>
+                            <ul class="list list_2">
+                                <li>
+                                    <a href="#">Subtotal
+                                        <span>${{cart.get_total_price_without_sale}}</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">Shipping
+                                        <span>Flat rate: $50.00</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">Total
+                                        <span>${{cart.get_total_price}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="payment_item">
+                                <div class="radion_btn">
+                                    <input type="radio" id="f-option5" name="selector"/>
+                                    <label for="f-option5">Check payments</label>
+                                    <div class="check"></div>
+                                </div>
+                                <p>
+                                    Please send a check to Store Name, Store Street, Store Town,
+                                    Store State / County, Store Postcode.
+                                </p>
+                            </div>
+                            <div class="payment_item active">
+                                <div class="radion_btn">
+                                    <input type="radio" id="f-option6" name="selector"/>
+                                    <label for="f-option6">Paypal </label>
+                                    <img src="img/product/single-product/card.jpg" alt=""/>
+                                    <div class="check"></div>
+                                </div>
+                                <p>
+                                    Please send a check to Store Name, Store Street, Store Town,
+                                    Store State / County, Store Postcode.
+                                </p>
+                            </div>
+                            <div class="create_account">
+                                <input type="checkbox" id="f-option4" name="selector"/>
+                                <label for="f-option4">I’ve read and accept the </label>
+                                <a href="#">terms & conditions*</a>
+                            </div>
+                            <button class="btn_3" type="submit">Proceed to Paypal</button></a>
+
+                        </div>
+                    </div>
+            </form></div>
+
+    </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
